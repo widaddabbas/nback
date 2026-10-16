@@ -48,22 +48,22 @@ function generateModalitySequence(
     const plusIndex = i - (n + 1);
     const minusValue = n > 1 && minusIndex >= 0 ? out[minusIndex]?.value : undefined;
     const plusValue = plusIndex >= 0 ? out[plusIndex]?.value : undefined;
+    const minusEligible = minusValue !== undefined && minusValue !== targetValue;
+    const plusEligible = plusValue !== undefined && plusValue !== targetValue;
     const lureRoll = random();
 
-    if (
-      minusValue !== undefined &&
-      minusValue !== targetValue &&
-      lureRoll < modalityConfig.lureMinusProbability
-    ) {
+    if (minusEligible && lureRoll < modalityConfig.lureMinusProbability) {
       out.push({ value: minusValue, isTarget: false, lure: 'minus' });
       continue;
     }
 
-    if (
-      plusValue !== undefined &&
-      plusValue !== targetValue &&
-      lureRoll < modalityConfig.lureMinusProbability + modalityConfig.lurePlusProbability
-    ) {
+    // When the minus-lure slot isn't eligible, its probability share isn't reserved,
+    // so the plus-lure check must not inherit that unused width.
+    const plusThreshold = minusEligible
+      ? modalityConfig.lureMinusProbability + modalityConfig.lurePlusProbability
+      : modalityConfig.lurePlusProbability;
+
+    if (plusEligible && lureRoll < plusThreshold) {
       out.push({ value: plusValue, isTarget: false, lure: 'plus' });
       continue;
     }
