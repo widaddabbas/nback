@@ -89,7 +89,16 @@ export default function App() {
         onHistory={() => setScreen('history')}
         onConfigure={() => setScreen('configure')}
       /> : null}
-      <footer className="site-footer"><span>N–Back</span><a href="https://github.com/widaddabbas">GitHub ↗</a><span>data stays local</span></footer>
+      <footer className="site-footer">
+        <span>N–Back</span>
+        <div className="footer-socials">
+          <a href="https://www.linkedin.com/in/widad-dabbas/" aria-label="LinkedIn"><img src={`${import.meta.env.BASE_URL}icons/linkedin.png`} alt="" /></a>
+          <a href="https://www.instagram.com/widad.dabbas/" aria-label="Instagram"><img src={`${import.meta.env.BASE_URL}icons/instagram.png`} alt="" /></a>
+          <a href="https://www.github.com/widaddabbas" aria-label="GitHub"><img src={`${import.meta.env.BASE_URL}icons/github.png`} alt="" /></a>
+          <a href="mailto:dabbas.widad@gmail.com" aria-label="Email"><img src={`${import.meta.env.BASE_URL}icons/mail.png`} alt="" /></a>
+        </div>
+        <span>data stays local</span>
+      </footer>
     </div>
   );
 }

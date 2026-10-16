@@ -15,7 +15,7 @@ export function Header({ screen, onNavigate }: Props) {
           <button className={screen === 'home' ? 'active' : ''} onClick={() => onNavigate('home')}>play</button>
           <button className={screen === 'configure' ? 'active' : ''} onClick={() => onNavigate('configure')}>configure</button>
           <button className={screen === 'history' ? 'active' : ''} onClick={() => onNavigate('history')}>history</button>
-          <a href="https://widaddabbas.github.io/">author ↗</a>
+          <a href="https://widaddabbas.github.io/">elsewhere</a>
         </nav>
       </div>
     </header>
