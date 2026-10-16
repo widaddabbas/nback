@@ -13,7 +13,6 @@ export function Home({ config, setConfig, onStart, onConfigure }: {
   return (
     <main className="page home-page">
       <section className="hero">
-        <p className="eyebrow">working-memory task</p>
         <h2>{config.name || 'Custom n-back'}</h2>
         <p className="hero-summary">
           {enabled.map((id) => `${modalityLabels[id]} ${config.modalities[id].n}-back`).join(' · ')}
