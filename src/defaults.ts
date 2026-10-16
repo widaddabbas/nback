@@ -18,6 +18,7 @@ export const DEFAULT_CONFIG: AppConfig = {
   responseWindowMs: 1950,
   showTrialCounter: true,
   showProgress: true,
+  showInstructions: true,
   allowLateResponse: true,
   grid: {
     rows: 3,

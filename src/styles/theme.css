@@ -108,6 +108,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 .game-page { width: min(1100px, calc(100% - 28px)); min-height: 100vh; margin: 0 auto; padding: 24px 0; display: flex; flex-direction: column; }
 .game-centre { align-items: center; justify-content: center; text-align: center; color: var(--muted); }
+.instructions-page { justify-content: center; max-width: 620px; padding: 24px 0 60px; }
+.instructions-page .page-intro { margin-bottom: 28px; }
+.instructions-list { list-style: none; margin: 0 0 24px; padding: 0; border-top: 1px solid var(--line); }
+.instructions-list li { padding: 12px 0; border-bottom: 1px dotted var(--line-dark); }
+.instructions-list kbd { margin: 0 2px; }
+.instructions-note { color: var(--muted); line-height: 1.6; margin: 0 0 14px; }
 .game-centre h2 { color: var(--green); font-weight: 500; font-size: 2.5rem; }
 .countdown { color: var(--green); font-size: min(22vw, 10rem); line-height: 1; margin: 20px; }
 .game-meta { display: flex; align-items: center; justify-content: space-between; color: var(--muted); min-height: 30px; }

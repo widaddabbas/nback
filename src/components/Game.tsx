@@ -42,7 +42,9 @@ export function Game({ config, onComplete, onAbort }: {
 }) {
   const trials = useMemo(() => generateTrials(config), [config]);
   const enabled = useMemo(() => modalityIds.filter((id) => config.modalities[id].enabled), [config]);
-  const [phase, setPhase] = useState<'countdown' | 'playing' | 'paused'>('countdown');
+  const [phase, setPhase] = useState<'instructions' | 'countdown' | 'playing' | 'paused'>(
+    config.showInstructions ? 'instructions' : 'countdown',
+  );
   const [countdown, setCountdown] = useState(config.countdownSeconds);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visible, setVisible] = useState(false);
@@ -61,11 +63,13 @@ export function Game({ config, onComplete, onAbort }: {
   };
 
   useEffect(() => {
+    if (phase !== 'countdown') return;
     prepareAudio();
     if (config.countdownSeconds <= 0) {
       setPhase('playing');
       return;
     }
+    setCountdown(config.countdownSeconds);
     const timer = window.setInterval(() => {
       setCountdown((value) => {
         if (value <= 1) {
@@ -77,7 +81,7 @@ export function Game({ config, onComplete, onAbort }: {
       });
     }, 1000);
     return () => window.clearInterval(timer);
-  }, [config.countdownSeconds]);
+  }, [phase, config.countdownSeconds]);
 
   useEffect(() => {
     if (phase !== 'playing') return;
@@ -144,7 +148,7 @@ export function Game({ config, onComplete, onAbort }: {
       }
       if (event.key === 'Escape') {
         event.preventDefault();
-        setPhase((p) => (p === 'countdown' ? p : p === 'paused' ? 'playing' : 'paused'));
+        setPhase((p) => (p === 'playing' ? 'paused' : p === 'paused' ? 'playing' : p));
       }
     };
     window.addEventListener('keydown', handler);
@@ -152,7 +156,7 @@ export function Game({ config, onComplete, onAbort }: {
   }, [config, enabled, respond]);
 
   const pause = () => {
-    if (phase === 'countdown') return;
+    if (phase !== 'playing' && phase !== 'paused') return;
     if (phase === 'playing') {
       clearTimers();
       setVisible(false);
@@ -165,6 +169,40 @@ export function Game({ config, onComplete, onAbort }: {
       setPhase('playing');
     }
   };
+
+  if (phase === 'instructions') {
+    const hasLures = enabled.some(
+      (id) => config.modalities[id].lureMinusProbability > 0 || config.modalities[id].lurePlusProbability > 0,
+    );
+    return (
+      <main className="game-page instructions-page">
+        <div className="page-intro">
+          <p className="eyebrow">before you start</p>
+          <h2>How this session works</h2>
+          <p>A new stimulus appears every {((config.stimulusMs + config.blankMs) / 1000).toFixed(1)}s. For each stream, press its key only when the current stimulus is identical to the one shown exactly n trials earlier in that same stream.</p>
+        </div>
+        <ul className="instructions-list">
+          {enabled.map((id) => (
+            <li key={id}>
+              <strong>{modalityLabels[id]}</strong> — press <kbd>{config.modalities[id].responseKey.toUpperCase()}</kbd> when it matches {config.modalities[id].n}-back.
+            </li>
+          ))}
+        </ul>
+        {hasLures ? (
+          <p className="instructions-note">Some non-matching trials are deliberately close — matching what appeared one trial earlier or later than n-back. These are not matches: only respond to an exact n-back repeat.</p>
+        ) : null}
+        <p className="instructions-note">
+          {config.allowLateResponse
+            ? 'You can respond any time after a stimulus appears, including briefly after it disappears, up to the configured response window.'
+            : 'Respond while the stimulus is visible — responses after it disappears are ignored.'}
+        </p>
+        <div className="inline-actions">
+          <button className="primary-action" onClick={() => setPhase('countdown')}>begin →</button>
+          <button className="text-button" onClick={onAbort}>back</button>
+        </div>
+      </main>
+    );
+  }
 
   if (phase === 'countdown') {
     return (

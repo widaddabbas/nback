@@ -157,6 +157,7 @@ export function Configure({ config, setConfig, onStart }: {
       <Section title="interface">
         <Toggle label="Show trial number" checked={config.showTrialCounter} onChange={(v) => mutate((n) => { n.showTrialCounter = v; })} />
         <Toggle label="Show progress bar" checked={config.showProgress} onChange={(v) => mutate((n) => { n.showProgress = v; })} />
+        <Toggle label="Show instructions before each session" checked={config.showInstructions} help="Explains what counts as a match for this configuration before the countdown." onChange={(v) => mutate((n) => { n.showInstructions = v; })} />
       </Section>
 
       <div className="config-actions">

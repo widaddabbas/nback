@@ -21,6 +21,7 @@ export interface AppConfig {
   responseWindowMs: number;
   showTrialCounter: boolean;
   showProgress: boolean;
+  showInstructions: boolean;
   allowLateResponse: boolean;
   grid: {
     rows: number;
