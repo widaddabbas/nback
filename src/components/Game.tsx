@@ -144,7 +144,7 @@ export function Game({ config, onComplete, onAbort }: {
       }
       if (event.key === 'Escape') {
         event.preventDefault();
-        setPhase((p) => p === 'paused' ? 'playing' : 'paused');
+        setPhase((p) => (p === 'countdown' ? p : p === 'paused' ? 'playing' : 'paused'));
       }
     };
     window.addEventListener('keydown', handler);
